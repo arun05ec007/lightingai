@@ -13,10 +13,11 @@ from deepeval.metrics import (ContextualPrecisionMetric,
     FaithfulnessMetric)
 from deepeval.test_case import LLMTestCase
 
-os.environ["OPENAI_API_KEY"]= "sk-proj-VDHws6f41WZvdEP5NHZZT3BlbkFJssA15eF4K17KIQejjjMs"
+os.environ["OPENAI_API_KEY"]= "sk-proj-6wWhAgh2dd6AuN9ftMSuT3BlbkFJgJNjEts0NTDuKtxAZHeM"
 data=[]
 str_phrase =[]
 temp = []
+final =[]
 
 contextual_precision = ContextualPrecisionMetric()
 contextual_recall = ContextualRecallMetric()
@@ -45,6 +46,10 @@ actual_output = ""
 class Chat_api:
 
     def __init__(self):
+        data=[]
+        str_phrase =[]
+        temp = []
+        final =[]
         pass
 
     def eval_test(self):
@@ -76,7 +81,12 @@ class Chat_api:
         print("Score: ", faithfulness.score)
         print("Reason: ", faithfulness.reason)
     
-    def gpt_query(self,Question:str,File_name:str):                                                   # Pass Question and filename as input query                                  
+    def gpt_query(self,Question:str,File_name:str):   # Pass Question and filename as input query 
+        
+        data=[]
+        str_phrase =[]
+        temp = []
+        final =[]                                                                                 
 
         tokens = tokenizer_creds(Question, padding=True, truncation=True, return_tensors="pt").to(device)       # Get embeddings for the question using colbert model    
         with torch.no_grad():
@@ -108,12 +118,18 @@ class Chat_api:
                                 #"pagenumber" : hit["fields"]["pagenumber"][0]})  
 
         temp = [hit['docstring'] for hit in str_phrase]
-        print(temp)
-        # results = reranker.rerank(query=Question, documents=temp, top_n=3, model="rerank-english-v2.0")
+        results = reranker.rerank(query=Question, documents=temp, top_n=3, model="rerank-english-v3.0", return_documents = True)
+
+        for result in results.results:
+            val_index = int(result.index)
+            final.append({"docstring": result.document.text,
+                    "filename" : str_phrase[val_index]["filename"],
+                    "index" : result.index,
+                    "score" : result.relevance_score}) 
 
         # prompt = f""" Context information is below.
         #             ---------------------
-        #             {str_phrase}
+        #             {final}
         #             ---------------------
         #             Given the context information and not prior knowledge, answer the query.
         #             provide the citiation using the filename availabe in the data.
@@ -127,7 +143,7 @@ class Chat_api:
                     "role": "system",
                     "content": f"""you are a helpful assistant,who answers users question based on the given data , also provide the citiation using the filename provided
                    
-                    Data:{str_phrase}
+                    Data:{final}
                     """
                 },
                 {
@@ -145,8 +161,8 @@ class Chat_api:
         #     temperature=0)
 
         actual_output = chat_completion.choices[0].message.content
-        self.eval_test ()
-        return {1:data, 2:chat_completion.choices[0].message.content, 3 :str_phrase}
+        #self.eval_test ()
+        return {1:data, 2:chat_completion.choices[0].message.content, 3 :final, 4: results}
     
     
 Chat_bot=Chat_api()

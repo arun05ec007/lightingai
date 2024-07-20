@@ -1,7 +1,7 @@
 from io import BytesIO
 from fastapi import  File, UploadFile
 import PyPDF2
-#import re
+import re
 from langchain.text_splitter import LatexTextSplitter
 import torch
 import numpy as np
@@ -71,7 +71,7 @@ class Extract_text:
         
         for doc in docs:                                                      
             docstring=doc.page_content
-            #docstring =re.sub('[^A-Za-z0-9]+', ' ', docstring)                                        
+            docstring =re.sub('[^A-Za-z0-9]+', ' ', docstring)                                        
             self.vector_creation(docstring,file_name,page_num)                                                               # Passing each chunk for vector creation
 
 
