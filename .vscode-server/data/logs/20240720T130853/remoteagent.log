@@ -1,0 +1,31 @@
+2024-07-20 13:08:56.074 [info] 
+
+
+
+
+2024-07-20 13:08:56.075 [info] Extension host agent started.
+2024-07-20 13:08:56.342 [info] [<unknown>][dd52f827][ManagementConnection] New connection established.
+2024-07-20 13:08:56.347 [info] [<unknown>][a1f0459d][ExtensionHostConnection] New connection established.
+2024-07-20 13:08:56.484 [error] ExtensionHostConnection#buildUserEnvironment resolving shell environment failed Unable to resolve your shell environment: Unexpected exit code from spawned shell (code 127, signal null)
+2024-07-20 13:08:56.494 [info] [<unknown>][a1f0459d][ExtensionHostConnection] <undefined> Launched Extension Host Process.
+2024-07-20 13:08:56.495 [error] [<unknown>][a1f0459d][ExtensionHostConnection] <undefined> Extension Host Process had an error
+2024-07-20 13:08:56.495 [error] Error: spawn /teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-ea1445cc7016315d0f5728f8e8b12a45dc0a7286/server/node (deleted) ENOENT
+    at ChildProcess._handle.onexit (node:internal/child_process:286:19)
+    at onErrorNT (node:internal/child_process:484:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+2024-07-20 13:08:56.498 [info] Cancelling previous shutdown timeout
+2024-07-20 13:08:56.498 [info] Last EH closed, waiting before shutting down
+2024-07-20 13:08:56.736 [error] resolving shell environment failed Unable to resolve your shell environment: Unexpected exit code from spawned shell (code 127, signal null)
+2024-07-20 13:08:57.650 [error] ptyHost was unable to resolve shell environment Unable to resolve your shell environment: Unexpected exit code from spawned shell (code 127, signal null)
+2024-07-20 13:08:57.651 [error] ptyHost was unable to resolve shell environment Unable to resolve your shell environment: Unexpected exit code from spawned shell (code 127, signal null)
+2024-07-20 13:08:57.651 [error] ptyHost was unable to resolve shell environment Unable to resolve your shell environment: Unexpected exit code from spawned shell (code 127, signal null)
+2024-07-20 13:08:57.651 [error] ptyHost was unable to resolve shell environment Unable to resolve your shell environment: Unexpected exit code from spawned shell (code 127, signal null)
+2024-07-20 13:09:00.154 [error] ExtensionHostConnection#buildUserEnvironment resolving shell environment failed Unable to resolve your shell environment: Unexpected exit code from spawned shell (code 127, signal null)
+2024-07-20 13:09:00.163 [error] ExtensionHostConnection#buildUserEnvironment resolving shell environment failed Unable to resolve your shell environment: Unexpected exit code from spawned shell (code 127, signal null)
+2024-07-20 13:09:00.164 [error] ExtensionHostConnection#buildUserEnvironment resolving shell environment failed Unable to resolve your shell environment: Unexpected exit code from spawned shell (code 127, signal null)
+2024-07-20 13:09:00.166 [error] ExtensionHostConnection#buildUserEnvironment resolving shell environment failed Unable to resolve your shell environment: Unexpected exit code from spawned shell (code 127, signal null)
+2024-07-20 13:09:05.158 [error] No ptyHost response to createProcess after 5 seconds
+2024-07-20 13:09:05.165 [error] No ptyHost response to createProcess after 5 seconds
+2024-07-20 13:09:05.166 [error] No ptyHost response to createProcess after 5 seconds
+2024-07-20 13:09:05.168 [error] No ptyHost response to createProcess after 5 seconds
+2024-07-20 13:13:56.500 [info] Last EH closed, shutting down

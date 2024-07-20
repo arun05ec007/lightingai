@@ -1,0 +1,6 @@
+{
+    "/Upload_File": {
+      "target": "http://host.docker.internal:8000/",
+      "secure": false
+    }
+}

@@ -1,0 +1,14 @@
+tenacity
+fastapi
+PyPDF2
+langchain
+torch
+transformers
+groq
+elasticsearch
+accelerate
+numpy
+openai
+mistralai
+deepeval
+cohere

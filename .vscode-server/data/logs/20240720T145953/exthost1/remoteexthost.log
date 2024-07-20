@@ -1,0 +1,32 @@
+2024-07-20 14:59:58.390 [info] Extension host with pid 1297 started
+2024-07-20 14:59:58.390 [error] Error: EEXIST: file already exists, open '/teamspace/studios/this_studio/.vscode-server/data/User/workspaceStorage/66a8860de00ba6f38762c6277ecc2506/vscode.lock'
+2024-07-20 14:59:58.396 [info] Lock '/teamspace/studios/this_studio/.vscode-server/data/User/workspaceStorage/66a8860de00ba6f38762c6277ecc2506/vscode.lock': Could not acquire lock, checking if the file is stale.
+2024-07-20 14:59:58.412 [info] Lock '/teamspace/studios/this_studio/.vscode-server/data/User/workspaceStorage/66a8860de00ba6f38762c6277ecc2506/vscode.lock': The pid 3012 appears to be gone.
+2024-07-20 14:59:58.413 [info] Lock '/teamspace/studios/this_studio/.vscode-server/data/User/workspaceStorage/66a8860de00ba6f38762c6277ecc2506/vscode.lock': Deleting a stale lock.
+2024-07-20 14:59:58.430 [info] Lock '/teamspace/studios/this_studio/.vscode-server/data/User/workspaceStorage/66a8860de00ba6f38762c6277ecc2506/vscode.lock': Lock acquired.
+2024-07-20 14:59:59.138 [info] ExtensionService#_doActivateExtension vscode.emmet, startup: false, activationEvent: 'onLanguage'
+2024-07-20 14:59:59.140 [info] ExtensionService#_doActivateExtension ms-azuretools.vscode-docker, startup: false, activationEvent: 'onLanguage:dockerfile'
+2024-07-20 15:00:00.141 [info] ExtensionService#_doActivateExtension vscode.git-base, startup: true, activationEvent: '*', root cause: vscode.git
+2024-07-20 15:00:01.260 [info] ExtensionService#_doActivateExtension vscode.git, startup: true, activationEvent: '*'
+2024-07-20 15:00:01.261 [info] ExtensionService#_doActivateExtension vscode.github, startup: true, activationEvent: '*'
+2024-07-20 15:00:01.838 [info] Eager extensions activated
+2024-07-20 15:00:01.838 [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch, startup: false, activationEvent: 'onStartupFinished'
+2024-07-20 15:00:01.839 [info] ExtensionService#_doActivateExtension vscode.merge-conflict, startup: false, activationEvent: 'onStartupFinished'
+2024-07-20 15:02:19.966 [warning] [Decorations] CAPPING events from decorations provider vscode.git 1375
+2024-07-20 15:02:20.302 [warning] [Decorations] CAPPING events from decorations provider vscode.git 1375
+2024-07-20 15:02:20.980 [error] Error: No such branch: main.
+	at F.getBranch (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:935457)
+	at async T.retryRun (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:1028191)
+	at async T.run (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:1027795)
+	at async T.getBranch (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:1016176)
+	at async T.getBranchBase (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:1016462)
+	at async t.GitHistoryProvider.resolveHEADMergeBase (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:945925)
+	at async t.GitHistoryProvider.onDidRunGitStatus (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:940157)
+2024-07-20 15:02:21.319 [error] Error: No such branch: main.
+	at F.getBranch (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:935457)
+	at async T.retryRun (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:1028191)
+	at async T.run (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:1027795)
+	at async T.getBranch (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:1016176)
+	at async T.getBranchBase (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:1016462)
+	at async t.GitHistoryProvider.resolveHEADMergeBase (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:945925)
+	at async t.GitHistoryProvider.onDidRunGitStatus (/teamspace/studios/this_studio/.vscode-server/cli/servers/Stable-f1e16e1e6214d7c44d078b1f0607b2388f29d729/server/extensions/git/dist/main.js:2:940157)

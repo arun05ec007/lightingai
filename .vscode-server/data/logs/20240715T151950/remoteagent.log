@@ -1,0 +1,11 @@
+2024-07-15 15:19:50.093 [info] 
+
+
+
+
+2024-07-15 15:19:50.105 [info] Extension host agent started.
+2024-07-15 15:19:50.410 [info] [<unknown>][64b4cd6e][ExtensionHostConnection] New connection established.
+2024-07-15 15:19:50.412 [info] [<unknown>][a6b1f916][ManagementConnection] New connection established.
+2024-07-15 15:19:50.583 [info] [<unknown>][64b4cd6e][ExtensionHostConnection] <4774> Launched Extension Host Process.
+2024-07-15 15:24:50.106 [info] New EH opened, aborting shutdown
+2024-07-15 16:24:29.025 [info] [<unknown>][a6b1f916][ManagementConnection] The client has disconnected, will wait for reconnection 3h before disposing...

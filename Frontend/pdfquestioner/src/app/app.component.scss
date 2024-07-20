@@ -1,0 +1,13 @@
+.d-flex {
+  div {
+    margin: 1rem;
+    font-weight: 500;
+    &.active {
+      border-bottom: 1px solid red;
+    }
+    &:hover {
+      color: red;
+      cursor: pointer;
+    }
+  }
+}
