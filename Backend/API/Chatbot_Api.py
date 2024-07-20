@@ -58,7 +58,7 @@ class Chat_api:
             input= input_quest,
             actual_output=actual_output,
             expected_output=expected_output,
-            retrieval_context= temp
+            retrieval_context= final
             )
 
         contextual_precision.measure(test_case)
@@ -161,7 +161,7 @@ class Chat_api:
         #     temperature=0)
 
         actual_output = chat_completion.choices[0].message.content
-        #self.eval_test ()
+        self.eval_test ()
         return {1:data, 2:chat_completion.choices[0].message.content, 3 :final, 4: results}
     
     
