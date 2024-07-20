@@ -1,8 +1,0 @@
-{
-    "security.promptForRemoteFileProtocolHandling": false,
-    "remote.SSH.connectTimeout": 60,
-    "remote.SSH.lockfilesInTmp": true,
-    "remote.SSH.remotePlatform": {
-        "ssh.lightning.ai": "linux"
-    }
-}
