@@ -1,15 +1,20 @@
 # 
 FROM python:3.9
 
+ENV PROJECT_DIR /usr/local/src/api
 # 
-WORKDIR /code
+WORKDIR ${PROJECT_DIR}
 
 RUN pip install --upgrade pip 
 # 
-COPY ./requirements.txt /code/requirements.txt
+COPY ./requirements.in ${PROJECT_DIR}/requirements.in
+
+RUN pip install pip-tools
+
+RUN pip-compile
 
 # 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --no-cache-dir -r ${PROJECT_DIR}/requirements.txt
 
 # 
-COPY ./ /code
+COPY ./ ${PROJECT_DIR}

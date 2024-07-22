@@ -1,5 +1,4 @@
 import torch
-import os
 from mistralai.models.chat_completion import ChatMessage
 from Config import allcreds
 import numpy as np
@@ -13,17 +12,27 @@ from deepeval.metrics import (ContextualPrecisionMetric,
     FaithfulnessMetric)
 from deepeval.test_case import LLMTestCase
 
-os.environ["OPENAI_API_KEY"]= "sk-proj-6wWhAgh2dd6AuN9ftMSuT3BlbkFJgJNjEts0NTDuKtxAZHeM"
+
 data=[]
 str_phrase =[]
 temp = []
 final =[]
 
-contextual_precision = ContextualPrecisionMetric()
-contextual_recall = ContextualRecallMetric()
-contextual_relevancy = ContextualRelevancyMetric()
-answer_relevancy = AnswerRelevancyMetric()
-faithfulness = FaithfulnessMetric()
+contextual_precision = ContextualPrecisionMetric(threshold=0.7,
+    model="gpt-3.5-turbo",
+    include_reason=True)
+contextual_recall = ContextualRecallMetric(threshold=0.7,
+    model="gpt-3.5-turbo",
+    include_reason=True)
+contextual_relevancy = ContextualRelevancyMetric(threshold=0.7,
+    model="gpt-3.5-turbo",
+    include_reason=True)
+answer_relevancy = AnswerRelevancyMetric(threshold=0.7,
+    model="gpt-3.5-turbo",
+    include_reason=True)
+faithfulness = FaithfulnessMetric(threshold=0.7,
+    model="gpt-3.5-turbo",
+    include_reason=True)
 
 
 
@@ -52,13 +61,13 @@ class Chat_api:
         final =[]
         pass
 
-    def eval_test(self):
+    def eval_test(self, final, actual_output):
 
         test_case = LLMTestCase(
             input= input_quest,
             actual_output=actual_output,
             expected_output=expected_output,
-            retrieval_context= final
+            retrieval_context= [hit['docstring'] for hit in final]
             )
 
         contextual_precision.measure(test_case)
@@ -161,7 +170,7 @@ class Chat_api:
         #     temperature=0)
 
         actual_output = chat_completion.choices[0].message.content
-        self.eval_test ()
+        self.eval_test (final, actual_output)
         return {1:data, 2:chat_completion.choices[0].message.content, 3 :final, 4: results}
     
     

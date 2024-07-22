@@ -5,6 +5,11 @@ import openai
 import cohere
 from mistralai.client import MistralClient
 from transformers import AutoModel, AutoTokenizer, AutoModelForCausalLM
+import os
+
+# Disable tokenizers parallelism
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["OPENAI_API_KEY"]= "sk-proj-6wWhAgh2dd6AuN9ftMSuT3BlbkFJgJNjEts0NTDuKtxAZHeM"
 
 access_token = "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"
 
