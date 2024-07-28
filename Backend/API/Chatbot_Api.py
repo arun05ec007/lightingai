@@ -96,7 +96,7 @@ class Chat_api:
         str_phrase =[]
         temp = []
         final =[]                                                                                 
-
+        
         tokens = tokenizer_creds(Question, padding=True, truncation=True, return_tensors="pt").to(device)       # Get embeddings for the question using colbert model    
         with torch.no_grad():
              embeddings = colbert_creds(**tokens).last_hidden_state.mean(dim=1).numpy()[0]
@@ -170,7 +170,9 @@ class Chat_api:
         #     temperature=0)
 
         actual_output = chat_completion.choices[0].message.content
-        self.eval_test (final, actual_output)
+        bool_evaluate = es_client.get(index="settings", id="settings")['_source']['eval']
+        if(bool_evaluate):
+            self.eval_test (final, actual_output)
         return {1:data, 2:chat_completion.choices[0].message.content, 3 :final, 4: results}
     
     
