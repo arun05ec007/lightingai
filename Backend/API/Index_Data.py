@@ -44,10 +44,10 @@ class Extract_text:
     def vector_creation(self,text_chunks,filename, page_num):
 
         count=0
-        tokens = tokenizer_creds(text_chunks, padding=True, truncation=True, return_tensors="pt").to(device)           # Tokenize text chunks
+        tokens = tokenizer_creds(text_chunks, padding=True, truncation=True, return_tensors="pt").to(device)        # Tokenize text chunks
         with torch.no_grad():                                                                                       # Get embeddings for the passed chunks using colbert model
-            embeddings = colbert_creds(**tokens).last_hidden_state.mean(dim=1).numpy()[0]                     # Compute embeddings and convert to NumPy array 
-            self.IndexData(filename,text_chunks,count,page_num,embeddings)                                                   # Store the embeddings with associated data
+            embeddings = colbert_creds(**tokens).last_hidden_state.mean(dim=1).numpy()[0]                           # Compute embeddings and convert to NumPy array 
+            self.IndexData(filename,text_chunks,count,page_num,embeddings)                                          # Store the embeddings with associated data
             count+=1
         
         # Convert bytes to a readable blob for PyPDF2
@@ -60,10 +60,10 @@ class Extract_text:
             except Exception:
                 return {"message": "There was an error reading the file"}
 
-            blob_to_read = BytesIO(contents)                                                                            # convert content into blob. 
-            file_reader = PyPDF2.PdfReader(blob_to_read)                                                                # Read the blob using PdfReader
+            blob_to_read = BytesIO(contents)                                                                   # convert content into blob. 
+            file_reader = PyPDF2.PdfReader(blob_to_read)                                                       # Read the blob using PdfReader
             text_content = ""
-            for page_num in range(len(file_reader.pages)):                                                              # Loop through each pages and extract text.
+            for page_num in range(len(file_reader.pages)):                                                     # Loop through each pages and extract text.
                 page = file_reader.pages[page_num]
                 text_content += page.extract_text()
             
