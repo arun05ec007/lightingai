@@ -96,10 +96,14 @@ class Chat_api:
         str_phrase =[]
         temp = []
         final =[]                                                                                 
-        
-        tokens = tokenizer_creds(Question, padding=True, truncation=True, return_tensors="pt").to(device)       # Get embeddings for the question using colbert model    
-        with torch.no_grad():
-             embeddings = colbert_creds(**tokens).last_hidden_state.mean(dim=1).numpy()[0]
+        setting_embed = es_client.get(index="settings", id="settings")['_source']['embedding']
+        if(setting_embed == "OpenAI") :
+            embeddings = openAI_client.embeddings.create(input = Question,model="text-embedding-3-small").data[0].embedding
+
+        if(setting_embed == "Colbert") :
+            tokens = tokenizer_creds(Question, padding=True, truncation=True, return_tensors="pt").to(device)       # Get embeddings for the question using colbert model    
+            with torch.no_grad():
+                embeddings = colbert_creds(**tokens).last_hidden_state.mean(dim=1).numpy()[0]
 
         query = es_client.search( index="chatbot_index", body={                                       # Query to fetch first 3 document from elastic search index 
                 "_source": [

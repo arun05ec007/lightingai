@@ -17,8 +17,8 @@ es_client = allcreds["es"]
 groq_client = allcreds["client"]
 colbert_creds=allcreds["colbert"].to(device)
 tokenizer_creds=allcreds["tokenizer"]
-
-
+openAI_client = allcreds["openAI"]
+mistralai_client = allcreds["mistralai"]
 
 # Class to extract file content and index in elastic.
 
@@ -44,11 +44,17 @@ class Extract_text:
     def vector_creation(self,text_chunks,filename, page_num):
 
         count=0
-        tokens = tokenizer_creds(text_chunks, padding=True, truncation=True, return_tensors="pt").to(device)        # Tokenize text chunks
-        with torch.no_grad():                                                                                       # Get embeddings for the passed chunks using colbert model
-            embeddings = colbert_creds(**tokens).last_hidden_state.mean(dim=1).numpy()[0]                           # Compute embeddings and convert to NumPy array 
-            self.IndexData(filename,text_chunks,count,page_num,embeddings)                                          # Store the embeddings with associated data
-            count+=1
+        setting_embed = es_client.get(index="settings", id="settings")['_source']['embedding']
+        if(setting_embed == "OpenAI") :
+            resp_openAI = openAI_client.embeddings.create(input = text_chunks,model="text-embedding-3-small").data[0].embedding
+            self.IndexData(filename,text_chunks,count,page_num,resp_openAI)
+        
+        if(setting_embed == "Colbert") :
+            tokens = tokenizer_creds(text_chunks, padding=True, truncation=True, return_tensors="pt").to(device)           # Tokenize text chunks
+            with torch.no_grad():                                                                                        # Get embeddings for the passed chunks using colbert model
+                embeddings = colbert_creds(**tokens).last_hidden_state.mean(dim=1).numpy()[0]                            # Compute embeddings and convert to NumPy array 
+                self.IndexData(filename,text_chunks,count,page_num,embeddings)                                           # Store the embeddings with associated data
+                count+=1
         
         # Convert bytes to a readable blob for PyPDF2
     async def Extract_text(self,file: UploadFile = File(...)):
@@ -68,7 +74,7 @@ class Extract_text:
                 text_content += page.extract_text()
             
             # Load a pre-trained sentence transformer model
-            latex_splitter = LatexTextSplitter(chunk_size=2048, chunk_overlap=50)                              # Split the content into chunks
+            latex_splitter = LatexTextSplitter(chunk_size=1024, chunk_overlap=50)                              # Split the content into chunks
             docs = latex_splitter.create_documents(texts=[text_content])                                       # Create a list of chunks
             
             for doc in docs:                                                      

@@ -12,3 +12,5 @@ openai
 mistralai
 deepeval
 cohere
+uvicorn
+python-multipart

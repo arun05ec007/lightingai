@@ -1,7 +1,8 @@
 # 
-FROM python:3.9
+FROM python:latest
 
-ENV PROJECT_DIR /usr/local/src/api
+ENV PATH="/usr/local/bin:${PATH}" 
+ENV PROJECT_DIR /usr/local/bin
 # 
 WORKDIR ${PROJECT_DIR}
 
@@ -15,6 +16,8 @@ RUN pip-compile
 
 # 
 RUN pip install --no-cache-dir -r ${PROJECT_DIR}/requirements.txt
+
+RUN echo $PATH
 
 # 
 COPY ./ ${PROJECT_DIR}
