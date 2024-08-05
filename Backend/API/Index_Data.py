@@ -7,6 +7,7 @@ import torch
 import numpy as np
 from Config import allcreds
 from typing import Dict, Annotated
+import torch.nn.functional as F
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -15,10 +16,16 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 
 es_client = allcreds["es"]
 groq_client = allcreds["client"]
+
 colbert_creds=allcreds["colbert"].to(device)
-tokenizer_creds=allcreds["tokenizer"]
+colbert_tokenizer=allcreds["colbert_tokenizer"]
+
+alibaba_creds=allcreds["Alibaba"].to(device)
+alibaba_tokenizer=allcreds["Alibaba_tokenizer"]
+
 openAI_client = allcreds["openAI"]
 mistralai_client = allcreds["mistralai"]
+vo = allcreds["Voyage"]
 
 # Class to extract file content and index in elastic.
 
@@ -26,6 +33,18 @@ class Extract_text:
 
     def __init__(self):
         pass
+    
+    def normalize_l2(self,x):
+        x = np.array(x)
+        if x.ndim == 1:
+            norm = np.linalg.norm(x)
+            if norm == 0:
+                return x
+            return x / norm
+        else:
+            norm = np.linalg.norm(x, 2, axis=1, keepdims=True)
+            return np.where(norm == 0, x, x / norm)
+
 
     
     def IndexData(self,filename,docstring,count,page_num,embeddings):
@@ -45,17 +64,38 @@ class Extract_text:
 
         count=0
         setting_embed = es_client.get(index="settings", id="settings")['_source']['embedding']
+
         if(setting_embed == "OpenAI") :
-            resp_openAI = openAI_client.embeddings.create(input = text_chunks,model="text-embedding-3-small").data[0].embedding
+            resp_openAI = openAI_client.embeddings.create(input = text_chunks,model="text-embedding-3-small", encoding_format="float").data[0].embedding
+            # np_emb = self.normalize_l2(resp_openAI)
+            # print(np_emb.shape)
+            # print(type(np_emb))
+            self.IndexData(filename,text_chunks,count,page_num,resp_openAI)
+        
+        if(setting_embed == "OpenAI256") :
+            resp_openAI = openAI_client.embeddings.create(input = text_chunks,model="text-embedding-3-small", encoding_format="float").data[0].embedding[:256]
             self.IndexData(filename,text_chunks,count,page_num,resp_openAI)
         
         if(setting_embed == "Colbert") :
-            tokens = tokenizer_creds(text_chunks, padding=True, truncation=True, return_tensors="pt").to(device)           # Tokenize text chunks
+            tokens = colbert_tokenizer(text_chunks, padding=True, truncation=True, return_tensors="pt").to(device)           # Tokenize text chunks
             with torch.no_grad():                                                                                        # Get embeddings for the passed chunks using colbert model
                 embeddings = colbert_creds(**tokens).last_hidden_state.mean(dim=1).numpy()[0]                            # Compute embeddings and convert to NumPy array 
+                # print(type(embeddings))
+                # print(embeddings.shape)
                 self.IndexData(filename,text_chunks,count,page_num,embeddings)                                           # Store the embeddings with associated data
                 count+=1
-        
+
+        if(setting_embed == "Alibaba") :
+            tokens = alibaba_tokenizer(text_chunks, padding=True, truncation=True, return_tensors="pt").to(device)           
+            with torch.no_grad():                                                                                        
+                embeddings = alibaba_creds(**tokens).last_hidden_state[:, 0] 
+                embeddings = F.normalize(embeddings, p=2, dim=1)  
+                embeddings = np.array(embeddings)[0]  
+                # print(type(embeddings))
+                # print(embeddings.shape)                                                     
+                self.IndexData(filename,text_chunks,count,page_num,embeddings)                                           # 
+                count+=1
+
         # Convert bytes to a readable blob for PyPDF2
     async def Extract_text(self,file: UploadFile = File(...)):
         try:

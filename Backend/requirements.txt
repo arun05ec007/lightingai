@@ -13,4 +13,5 @@ mistralai
 deepeval
 cohere
 uvicorn
+voyageai
 python-multipart

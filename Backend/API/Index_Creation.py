@@ -19,14 +19,14 @@ class index:
                         },
                         "embeddings": {
                             "type": "dense_vector",
-                            "dims": 1536
-                            #"index": True,
-                            #"similarity": "cosine"
-                            # "index_options": {
-                            #     "type": "hnsw",
-                            #     "m" : 16,
-                            #     "ef_construction" : 100
-                            # }
+                            "dims": 1024,
+                            "index": True,
+                            "similarity": "cosine",
+                            "index_options": {
+                                "type": "hnsw",
+                                "m" : 16,
+                                "ef_construction" : 100
+                            }
                         },
                         "filename": {
                             "type": "keyword"
