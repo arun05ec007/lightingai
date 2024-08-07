@@ -8,6 +8,10 @@ import numpy as np
 from Config import allcreds
 from typing import Dict, Annotated
 import torch.nn.functional as F
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_openai.embeddings import OpenAIEmbeddings
+from langchain_cohere import CohereEmbeddings
+
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -26,6 +30,7 @@ alibaba_tokenizer=allcreds["Alibaba_tokenizer"]
 openAI_client = allcreds["openAI"]
 mistralai_client = allcreds["mistralai"]
 vo = allcreds["Voyage"]
+embeddings_model = CohereEmbeddings(cohere_api_key="2Y8jF8avzmAnMN1S6vGOkWr2ihj8prQcJpf8RIpw", model="embed-english-v3.0", embedding_types=['float'])
 
 # Class to extract file content and index in elastic.
 
@@ -114,9 +119,15 @@ class Extract_text:
                 text_content += page.extract_text()
             
             # Load a pre-trained sentence transformer model
-            latex_splitter = LatexTextSplitter(chunk_size=1024, chunk_overlap=50)                              # Split the content into chunks
+            latex_splitter = LatexTextSplitter(chunk_size=1536, chunk_overlap=75)                              # Split the content into chunks
             docs = latex_splitter.create_documents(texts=[text_content])                                       # Create a list of chunks
-            
+            print("Document chunk count : ", len(docs))
+
+            # Load a pre-trained sentence transformer model
+            # text_splitter = SemanticChunker( OpenAIEmbeddings(), breakpoint_threshold_type="gradient")            # Split the content into chunks
+            # docs_semantic = text_splitter.create_documents(texts=[text_content])                               # Create a list of chunks
+            # print("Document semantic chunk count : ", len(docs_semantic))
+
             for doc in docs:                                                      
                 docstring=doc.page_content
                 docstring =re.sub('[^A-Za-z0-9]+', ' ', docstring)                                        

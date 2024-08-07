@@ -15,3 +15,6 @@ cohere
 uvicorn
 voyageai
 python-multipart
+langchain_experimental
+langchain_openai
+langchain-cohere
