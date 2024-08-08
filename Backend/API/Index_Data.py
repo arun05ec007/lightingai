@@ -2,7 +2,7 @@ from io import BytesIO
 from fastapi import  File, UploadFile, Body
 import PyPDF2
 import re
-from langchain.text_splitter import LatexTextSplitter
+from langchain.text_splitter import LatexTextSplitter, SpacyTextSplitter
 import torch
 import numpy as np
 from Config import allcreds
@@ -119,8 +119,10 @@ class Extract_text:
                 text_content += page.extract_text()
             
             # Load a pre-trained sentence transformer model
-            latex_splitter = LatexTextSplitter(chunk_size=1536, chunk_overlap=75)                              # Split the content into chunks
+            latex_splitter = LatexTextSplitter(chunk_size=1024, chunk_overlap=75) 
+            #spacy_splitter = SpacyTextSplitter(chunk_size=1024, chunk_overlap=75)                             # Split the content into chunks
             docs = latex_splitter.create_documents(texts=[text_content])                                       # Create a list of chunks
+            #docs = spacy_splitter.split_text(text_content)
             print("Document chunk count : ", len(docs))
 
             # Load a pre-trained sentence transformer model
@@ -130,6 +132,7 @@ class Extract_text:
 
             for doc in docs:                                                      
                 docstring=doc.page_content
+                #docstring=doc
                 docstring =re.sub('[^A-Za-z0-9]+', ' ', docstring)                                        
                 self.vector_creation(docstring,file_name,page_num)                                             # Passing each chunk for vector creation
                                                                             

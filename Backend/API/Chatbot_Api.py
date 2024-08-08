@@ -1,5 +1,5 @@
 import torch
-from mistralai.models.chat_completion import ChatMessage
+from mistralai import UserMessage
 from Config import allcreds
 import numpy as np
 import torch.nn.functional as F
@@ -202,8 +202,8 @@ class Chat_api:
             temperature=0
         )
 
-        # messages = [ChatMessage(role="user", content=prompt)]
-        # chat_completion = mistralai_client.chat(model="mistral-large-latest", messages=messages, max_tokens=4090,
+        # messages = [{"role"="user", "content"="prompt"}]
+        # chat_completion = mistralai_client.chat.complete(model="mistral-large-latest", messages=messages, max_tokens=4090,
         #     temperature=0)
 
         actual_output = chat_completion.choices[0].message.content

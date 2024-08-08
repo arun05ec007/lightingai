@@ -17,6 +17,10 @@ RUN pip-compile
 # 
 RUN pip install --no-cache-dir -r ${PROJECT_DIR}/requirements.txt
 
+# Download spacy model
+RUN spacy download en_core_web_sm
+
+
 RUN echo $PATH
 
 # 
