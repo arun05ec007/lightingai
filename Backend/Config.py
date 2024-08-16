@@ -27,5 +27,7 @@ allcreds = {
     "colbert" : AutoModel.from_pretrained("BAAI/bge-large-en-v1.5"),
     "colbert_tokenizer" : AutoTokenizer.from_pretrained("BAAI/bge-large-en-v1.5"),
     "Alibaba" : AutoModel.from_pretrained("Alibaba-NLP/gte-base-en-v1.5", trust_remote_code=True),
-    "Alibaba_tokenizer" : AutoTokenizer.from_pretrained("Alibaba-NLP/gte-base-en-v1.5", trust_remote_code=True)
+    "Alibaba_tokenizer" : AutoTokenizer.from_pretrained("Alibaba-NLP/gte-base-en-v1.5", trust_remote_code=True),
+    "sinequatokenizer" : AutoTokenizer.from_pretrained("sinequa/vectorizer.vanilla"),
+    "sinequamodel" : AutoModel.from_pretrained("sinequa/vectorizer.vanilla")
 }

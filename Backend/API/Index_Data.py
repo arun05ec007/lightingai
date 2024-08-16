@@ -27,6 +27,9 @@ colbert_tokenizer=allcreds["colbert_tokenizer"]
 alibaba_creds=allcreds["Alibaba"].to(device)
 alibaba_tokenizer=allcreds["Alibaba_tokenizer"]
 
+sinequa_creds=allcreds["sinequamodel"].to(device)
+sinequa_tokenizer=allcreds["sinequatokenizer"]
+
 openAI_client = allcreds["openAI"]
 mistralai_client = allcreds["mistralai"]
 vo = allcreds["Voyage"]
@@ -52,7 +55,7 @@ class Extract_text:
 
 
     
-    def IndexData(self,filename,docstring,count,page_num,embeddings):
+    def IndexData(self,elkindex,filename,docstring,count,page_num,embeddings):
 
         jsondata ={                                                                                                 # Index data into elastic search
             "filename":filename,
@@ -62,7 +65,7 @@ class Extract_text:
             "embeddings":embeddings
         }
 
-        es_client.index(index="chatbot_index", document=jsondata)
+        es_client.index(index=elkindex, document=jsondata)
         return "Data got indexed"
 
     def vector_creation(self,text_chunks,filename, page_num):
@@ -70,16 +73,14 @@ class Extract_text:
         count=0
         setting_embed = es_client.get(index="settings", id="settings")['_source']['embedding']
 
-        if(setting_embed == "OpenAI") :
-            resp_openAI = openAI_client.embeddings.create(input = text_chunks,model="text-embedding-3-small", encoding_format="float").data[0].embedding
+        if(setting_embed == "OpenAI" or setting_embed == "OpenAI256") :
+            resp_openAI = openAI_client.embeddings.create(input = text_chunks,model="text-embedding-3-small", encoding_format="float").data[0]
             # np_emb = self.normalize_l2(resp_openAI)
             # print(np_emb.shape)
             # print(type(np_emb))
-            self.IndexData(filename,text_chunks,count,page_num,resp_openAI)
-        
-        if(setting_embed == "OpenAI256") :
-            resp_openAI = openAI_client.embeddings.create(input = text_chunks,model="text-embedding-3-small", encoding_format="float").data[0].embedding[:256]
-            self.IndexData(filename,text_chunks,count,page_num,resp_openAI)
+            self.IndexData("chatbot_index",filename,text_chunks,count,page_num,resp_openAI.embedding)
+            # resp_openAI_256 = openAI_client.embeddings.create(input = text_chunks,model="text-embedding-3-small", encoding_format="float").data[0]
+            self.IndexData("chatbot_index_256",filename,text_chunks,count,page_num,resp_openAI.embedding[:256])
         
         if(setting_embed == "Colbert") :
             tokens = colbert_tokenizer(text_chunks, padding=True, truncation=True, return_tensors="pt").to(device)           # Tokenize text chunks
@@ -87,7 +88,7 @@ class Extract_text:
                 embeddings = colbert_creds(**tokens).last_hidden_state.mean(dim=1).numpy()[0]                            # Compute embeddings and convert to NumPy array 
                 # print(type(embeddings))
                 # print(embeddings.shape)
-                self.IndexData(filename,text_chunks,count,page_num,embeddings)                                           # Store the embeddings with associated data
+                self.IndexData("chatbot_index", filename,text_chunks,count,page_num,embeddings)                                           # Store the embeddings with associated data
                 count+=1
 
         if(setting_embed == "Alibaba") :
@@ -98,7 +99,18 @@ class Extract_text:
                 embeddings = np.array(embeddings)[0]  
                 # print(type(embeddings))
                 # print(embeddings.shape)                                                     
-                self.IndexData(filename,text_chunks,count,page_num,embeddings)                                           # 
+                self.IndexData("chatbot_index", filename,text_chunks,count,page_num,embeddings)                                           # 
+                count+=1
+
+        if(setting_embed == "Sinequa") :
+            tokens = sinequa_tokenizer(text_chunks, padding=True, truncation=True, return_tensors="pt").to(device)           # Tokenize text chunks
+            with torch.no_grad():                                                                                        # Get embeddings for the passed chunks using colbert model
+                embeddings = sinequa_creds(**tokens).last_hidden_state[:, 0] 
+                embeddings = F.normalize(embeddings, p=2, dim=1)  
+                embeddings = np.array(embeddings)[0]                           # Compute embeddings and convert to NumPy array 
+                # print(type(embeddings))
+                # print(embeddings.shape)
+                self.IndexData("chatbot_index_256", filename,text_chunks,count,page_num,embeddings)                                           # Store the embeddings with associated data
                 count+=1
 
         # Convert bytes to a readable blob for PyPDF2

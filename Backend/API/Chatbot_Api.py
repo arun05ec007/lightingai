@@ -52,6 +52,9 @@ colbert_tokenizer=allcreds["colbert_tokenizer"]
 alibaba_creds=allcreds["Alibaba"].to(device)
 alibaba_tokenizer=allcreds["Alibaba_tokenizer"]
 
+sinequa_creds=allcreds["sinequamodel"].to(device)
+sinequa_tokenizer=allcreds["sinequatokenizer"]
+
 reranker = allcreds["cohere_reranker"]
 vo = allcreds["Voyage"]
 
@@ -135,26 +138,53 @@ class Chat_api:
             with torch.no_grad():                                                                                        
                 embeddings = alibaba_creds(**tokens).last_hidden_state[:, 0] 
                 embeddings = F.normalize(embeddings, p=2, dim=1)
-                embeddings = np.array(embeddings)[0]  
+                embeddings = np.array(embeddings)[0] 
 
-        query = es_client.search( index="chatbot_index", body={                                       # Query to fetch first 3 document from elastic search index 
-                "_source": [
-                    "docstring"],
-                    'size':7, 
-                'query': { 'script_score': { 'query': {'match_all': {}                                # Match all documents in the index
-                        }, 
-                'script': { 'source': "cosineSimilarity(params.query_vector, 'embeddings') + 1.0",    # Script to calculate the cosine similarity score
-                           'params': {'query_vector': embeddings                                      # Pass the query vector (embeddings) as a parameter to the script
-                            } 
+        if(setting_embed == "Sinequa") :
+            tokens = sinequa_tokenizer(Question, padding=True, truncation=True, return_tensors="pt").to(device)           
+            with torch.no_grad():                                                                                        
+                embeddings = sinequa_creds(**tokens).last_hidden_state[:, 0] 
+                embeddings = F.normalize(embeddings, p=2, dim=1)
+                embeddings = np.array(embeddings)[0]
+
+        if(setting_embed == "OpenAI256" or setting_embed == "Sinequa") : 
+
+            query = es_client.search( index="chatbot_index_256", body={                                       # Query to fetch first 3 document from elastic search index 
+                    "_source": [
+                        "docstring"],
+                        'size':10, 
+                    'query': { 'script_score': { 'query': {'match_all': {}                                # Match all documents in the index
+                            }, 
+                    'script': { 'source': "cosineSimilarity(params.query_vector, 'embeddings') + 1.0",    # Script to calculate the cosine similarity score
+                            'params': {'query_vector': embeddings                                      # Pass the query vector (embeddings) as a parameter to the script
+                                } 
+                            }
                         }
-                    }
-                },
-                "fields": [
-                            "filename",
-                            "pagenumber"
-                        ]
-            } )
-    
+                    }, 
+                    "fields": [
+                                "filename",
+                                "pagenumber"
+                            ]
+                } )
+        else :
+            query = es_client.search( index="chatbot_index", body={                                       # Query to fetch first 3 document from elastic search index 
+                    "_source": [
+                        "docstring"],
+                        'size':10, 
+                    'query': { 'script_score': { 'query': {'match_all': {}                                # Match all documents in the index
+                            }, 
+                    'script': { 'source': "cosineSimilarity(params.query_vector, 'embeddings') + 1.0",    # Script to calculate the cosine similarity score
+                            'params': {'query_vector': embeddings                                      # Pass the query vector (embeddings) as a parameter to the script
+                                } 
+                            }
+                        }
+                    },
+                    "fields": [
+                                "filename",
+                                "pagenumber"
+                            ]
+                } )
+        
         hits = query['hits']['hits']
         for hit in hits:
             data.append(hit)
@@ -163,7 +193,7 @@ class Chat_api:
                                 #"pagenumber" : hit["fields"]["pagenumber"][0]})  
 
         temp = [hit['docstring'] for hit in str_phrase]
-        results = reranker.rerank(query=Question, documents=temp, top_n=3, model="rerank-english-v3.0", return_documents = True)
+        results = reranker.rerank(query=Question, documents=temp, top_n=5, model="rerank-english-v3.0", return_documents = True)
         #voresults = vo.rerank(Question, temp, model="rerank-lite-1", top_k=3)
 
         for result in results.results:
