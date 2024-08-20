@@ -1,15 +1,27 @@
 # 
-FROM python:3.9
+FROM python:latest
 
+ENV PATH="/usr/local/bin:${PATH}" 
+ENV PROJECT_DIR /usr/local/bin
 # 
-WORKDIR /code
+WORKDIR ${PROJECT_DIR}
 
 RUN pip install --upgrade pip 
 # 
-COPY ./requirements.txt /code/requirements.txt
+COPY ./requirements.in ${PROJECT_DIR}/requirements.in
+
+RUN pip install pip-tools
+
+RUN pip-compile
 
 # 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --no-cache-dir -r ${PROJECT_DIR}/requirements.txt
+
+# Download spacy model
+RUN spacy download en_core_web_sm
+
+
+RUN echo $PATH
 
 # 
-COPY ./ /code
+COPY ./ ${PROJECT_DIR}
