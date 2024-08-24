@@ -131,22 +131,23 @@ class Extract_text:
                 text_content += page.extract_text()
             
             # Load a pre-trained sentence transformer model
-            #latex_splitter = LatexTextSplitter(chunk_size=768, chunk_overlap=52) 
-            #docs = latex_splitter.create_documents(texts=[text_content]) 
+            latex_splitter = LatexTextSplitter(chunk_size=1024, chunk_overlap=52) 
+            docs = latex_splitter.create_documents(texts=[text_content]) 
             # spacy_splitter = SpacyTextSplitter(chunk_size=1024, chunk_overlap=75)                             # Split the content into chunks
             # docs = spacy_splitter.split_text(text_content)
-            # print("Document chunk count : ", len(docs))
+            print("Document chunk count : ", len(docs))
 
             #Load a pre-trained sentence transformer model
-            text_splitter = SemanticChunker( OpenAIEmbeddings(), breakpoint_threshold_type="gradient")            # Split the content into chunks
-            docs_semantic = text_splitter.create_documents(texts=[text_content])                               # Create a list of chunks
-            print("Document semantic chunk count : ", len(docs_semantic))
+            # text_splitter = SemanticChunker( OpenAIEmbeddings(), breakpoint_threshold_type="gradient")            # Split the content into chunks
+            # docs_semantic = text_splitter.create_documents(texts=[text_content])                               # Create a list of chunks
+            # print("Document semantic chunk count : ", len(docs_semantic))
 
-            #for doc in docs:
-            for doc in docs_semantic:                                                      
+            for doc in docs:
+            #for doc in docs_semantic:                                                      
                 docstring=doc.page_content
                 #docstring=doc
                 docstring =re.sub('[^A-Za-z0-9]+', ' ', docstring)                                        
+                print("-")
                 self.vector_creation(docstring,file_name,page_num)                                             # Passing each chunk for vector creation
                                                                             
         except Exception as e:
