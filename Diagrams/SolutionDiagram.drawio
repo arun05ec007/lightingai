@@ -1,0 +1,31 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" version="24.7.7">
+  <diagram name="Page-1" id="OML9Wt-XbSHljCsk3fw1">
+    <mxGraphModel dx="936" dy="474" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Ii-oey8H-uBz01F-xz1z-1" value="Elastic Search&amp;nbsp;&lt;div&gt;Database&lt;/div&gt;" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/database_cube.svg;" vertex="1" parent="1">
+          <mxGeometry x="140" y="160" width="75" height="83.33" as="geometry" />
+        </mxCell>
+        <mxCell id="Ii-oey8H-uBz01F-xz1z-2" value="Python Middleware" style="sketch=0;points=[[0.015,0.015,0],[0.985,0.015,0],[0.985,0.985,0],[0.015,0.985,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];verticalLabelPosition=bottom;html=1;verticalAlign=top;aspect=fixed;align=center;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=l2_modular2;fillColor=#FAFAFA;strokeColor=#005073;" vertex="1" parent="1">
+          <mxGeometry x="360" y="150" width="70" height="143.5" as="geometry" />
+        </mxCell>
+        <mxCell id="Ii-oey8H-uBz01F-xz1z-3" value="Web UI (nodeJs)" style="shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#4495D1;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.veeam.2d.web_ui;" vertex="1" parent="1">
+          <mxGeometry x="560" y="156.66" width="90" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="Ii-oey8H-uBz01F-xz1z-4" value="Indexing Data" style="shape=singleArrow;direction=west;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" vertex="1" parent="1">
+          <mxGeometry x="250" y="170" width="70" height="36.66" as="geometry" />
+        </mxCell>
+        <mxCell id="Ii-oey8H-uBz01F-xz1z-6" value="Retrieving data" style="shape=singleArrow;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="250" y="227.16" width="70" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="Ii-oey8H-uBz01F-xz1z-8" value="Search query" style="shape=singleArrow;direction=west;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" vertex="1" parent="1">
+          <mxGeometry x="456" y="170" width="64" height="36.66" as="geometry" />
+        </mxCell>
+        <mxCell id="Ii-oey8H-uBz01F-xz1z-9" value="Response&amp;nbsp;" style="shape=singleArrow;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="456" y="227.15999999999997" width="70" height="36" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
